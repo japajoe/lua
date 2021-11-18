@@ -15,7 +15,8 @@ extern "C"
     extern int luaAPI_GetTop(lua_State_Ptr state);
     extern bool luaAPI_Initialize(lua_State_Ptr state);    
     extern bool luaAPI_IsNumber(lua_State_Ptr state, int stackIndex);
-    extern bool luaAPI_IsString(lua_State_Ptr state, int stackIndex);    
+    extern bool luaAPI_IsString(lua_State_Ptr state, int stackIndex);
+    extern bool luaAPI_IsTable(lua_State_Ptr state, int stackIndex);
     extern void luaAPI_Register_Error_Callback(luaErrorCallback callback);
     extern void luaAPI_Register_Function(lua_State_Ptr state, luaFunction fn_ptr, const char* name);
     extern void luaAPI_Register_WriteLine_Callback(luaWriteLineCallback callback);   

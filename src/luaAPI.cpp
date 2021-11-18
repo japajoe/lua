@@ -104,6 +104,18 @@ bool luaAPI::IsString(lua_State** state, int stackIndex)
     return false;
 }
 
+bool luaAPI::IsTable(lua_State** state, int stackIndex)
+{
+    if(lua_istable(luaAPI::L, stackIndex))
+    {
+        *state = luaAPI::L;
+        return true;
+    }
+
+    *state = luaAPI::L;
+    return false;
+}
+
 void luaAPI::RegisterFunction(lua_State** state, luaFunction fn_ptr, const char* name)
 {
     lua_register(luaAPI::L, name, fn_ptr);

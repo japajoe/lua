@@ -28,6 +28,7 @@ public:
     static bool Initialize(lua_State** state);
     static bool IsNumber(lua_State** state, int stackIndex);
     static bool IsString(lua_State** state, int stackIndex);
+    static bool IsTable(lua_State** state, int stackIndex);
     static void Pop(lua_State** state, int stackIndex);
     static void PushBool(lua_State** state, bool value);
     static void PushFloat(lua_State** state, float value);

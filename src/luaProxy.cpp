@@ -42,12 +42,20 @@ extern "C" bool luaAPI_Initialize(lua_State_Ptr state)
 
 extern "C" bool luaAPI_IsNumber(lua_State_Ptr state, int stackIndex)
 {
-    return luaAPI::IsNumber((lua_State**)state, stackIndex);
+    bool result = luaAPI::IsNumber((lua_State**)state, stackIndex);
+    return result;
 }
 
 extern "C" bool luaAPI_IsString(lua_State_Ptr state, int stackIndex)
 {
-    return luaAPI::IsString((lua_State**)state, stackIndex);
+    bool result = luaAPI::IsString((lua_State**)state, stackIndex);
+    return result;
+}
+
+extern "C" bool luaAPI_IsTable(lua_State_Ptr state, int stackIndex)
+{
+    bool result = luaAPI::IsTable((lua_State**)state, stackIndex);
+    return result;
 }
 
 extern "C" void luaAPI_Register_Error_Callback(luaErrorCallback callback)
