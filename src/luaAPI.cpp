@@ -55,6 +55,12 @@ void luaAPI::GetGlobal(lua_State** state, const char* name)
     *state = luaAPI::L;
 }
 
+void luaAPI::GetTable(lua_State** state, int stackIndex)
+{
+    lua_gettable(luaAPI::L, stackIndex);
+    *state = luaAPI::L;
+}
+
 int luaAPI::GetTop(lua_State** state)
 {
     int result = lua_gettop(luaAPI::L);
@@ -116,29 +122,11 @@ bool luaAPI::IsTable(lua_State** state, int stackIndex)
     return false;
 }
 
-void luaAPI::RegisterFunction(lua_State** state, luaFunction fn_ptr, const char* name)
+int luaAPI::PCall(lua_State** state, int numArgs, int numReturnValues, int errorHandlingType)
 {
-    lua_register(luaAPI::L, name, fn_ptr);
+    int result = lua_pcall(luaAPI::L, numArgs, numReturnValues, errorHandlingType);
     *state = luaAPI::L;
-}
-
-void luaAPI::ToFloat(lua_State** state, int stackIndex, float* number)
-{
-    *number = (float)lua_tointeger(luaAPI::L, stackIndex);
-    *state = luaAPI::L;
-}
-
-void luaAPI::ToInt(lua_State** state, int stackIndex, int* number)
-{
-    *number = (int)lua_tointeger(luaAPI::L, stackIndex);
-    *state = luaAPI::L;
-}
-
-void luaAPI::ToString(lua_State** state, int stackIndex, char* str)
-{
-    std::string message = lua_tostring(luaAPI::L, stackIndex);
-    memcpy(str, &message[0], message.length());
-    *state = luaAPI::L;
+    return result;
 }
 
 void luaAPI::Pop(lua_State** state, int stackIndex)
@@ -171,9 +159,34 @@ void luaAPI::PushString(lua_State** state, const char* value)
     *state = luaAPI::L;
 }
 
+void luaAPI::RegisterFunction(lua_State** state, luaFunction fn_ptr, const char* name)
+{
+    lua_register(luaAPI::L, name, fn_ptr);
+    *state = luaAPI::L;
+}
+
 void luaAPI::SetTop(lua_State** state, int stackIndex)
 {
     lua_settop(luaAPI::L, stackIndex);
+    *state = luaAPI::L;
+}
+
+void luaAPI::ToFloat(lua_State** state, int stackIndex, float* number)
+{
+    *number = (float)lua_tointeger(luaAPI::L, stackIndex);
+    *state = luaAPI::L;
+}
+
+void luaAPI::ToInt(lua_State** state, int stackIndex, int* number)
+{
+    *number = (int)lua_tointeger(luaAPI::L, stackIndex);
+    *state = luaAPI::L;
+}
+
+void luaAPI::ToString(lua_State** state, int stackIndex, char* str)
+{
+    std::string message = lua_tostring(luaAPI::L, stackIndex);
+    memcpy(str, &message[0], message.length());
     *state = luaAPI::L;
 }
 

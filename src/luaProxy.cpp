@@ -28,6 +28,11 @@ extern "C" void luaAPI_GetGlobal(lua_State_Ptr state, const char* name)
     luaAPI::GetGlobal((lua_State**)state, name);
 }
 
+extern "C" void luaAPI_GetTable(lua_State_Ptr state, int stackIndex)
+{
+    luaAPI::GetTable((lua_State**)state, stackIndex);
+}
+
 extern "C" int luaAPI_GetTop(lua_State_Ptr state)
 {
     int result = luaAPI::GetTop((lua_State**)state);
@@ -58,24 +63,10 @@ extern "C" bool luaAPI_IsTable(lua_State_Ptr state, int stackIndex)
     return result;
 }
 
-extern "C" void luaAPI_Register_Error_Callback(luaErrorCallback callback)
+extern "C" int luaAPI_PCall(lua_State_Ptr state, int numArgs, int numReturnValues, int errorHandlingType)
 {
-    luaAPI::onError = callback;
-}
-
-extern "C" void luaAPI_Register_Function(lua_State_Ptr state, luaFunction fn_ptr, const char* name)
-{
-    luaAPI::RegisterFunction((lua_State**)state, fn_ptr, name);
-}
-
-extern "C" void luaAPI_Register_WriteLine_Callback(luaWriteLineCallback callback)
-{
-    luaAPI::onWriteLine = callback;
-}
-
-extern "C" void luaAPI_SetTop(lua_State_Ptr state, int stackIndex)
-{
-    luaAPI::SetTop((lua_State**)state, stackIndex);
+    int result = luaAPI::PCall((lua_State**)state, numArgs, numReturnValues, errorHandlingType);
+    return result;
 }
 
 extern "C" void luaAPI_Pop(lua_State_Ptr state, int stackIndex)
@@ -101,6 +92,26 @@ extern "C" void luaAPI_PushInt(lua_State_Ptr state, int value)
 extern "C" void luaAPI_PushString(lua_State_Ptr state, const char* value)
 {
     luaAPI::PushString((lua_State**)state, value);
+}
+
+extern "C" void luaAPI_Register_Error_Callback(luaErrorCallback callback)
+{
+    luaAPI::onError = callback;
+}
+
+extern "C" void luaAPI_Register_Function(lua_State_Ptr state, luaFunction fn_ptr, const char* name)
+{
+    luaAPI::RegisterFunction((lua_State**)state, fn_ptr, name);
+}
+
+extern "C" void luaAPI_Register_WriteLine_Callback(luaWriteLineCallback callback)
+{
+    luaAPI::onWriteLine = callback;
+}
+
+extern "C" void luaAPI_SetTop(lua_State_Ptr state, int stackIndex)
+{
+    luaAPI::SetTop((lua_State**)state, stackIndex);
 }
 
 extern "C" void luaAPI_ToFloat(lua_State_Ptr state, int stackIndex, float* number)
