@@ -1,6 +1,11 @@
 #include "luaProxy.h"
 #include <iostream>
 
+extern "C" void luaAPI_Call(lua_State_Ptr state, int numArgs, int numReturnValues)
+{
+    luaAPI::Call((lua_State**)state, numArgs, numReturnValues);
+}
+
 extern "C" bool luaAPI_Dispose(lua_State_Ptr state)
 {
     return luaAPI::Dispose((lua_State**)state);

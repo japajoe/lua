@@ -19,6 +19,7 @@ private:
     //Built in functions    
     static int lua_WriteLine(lua_State* state);
 public:
+    static void Call(lua_State** state, int numArgs, int numReturnValues);
     static bool Dispose(lua_State** state);
     static int  DoFile(lua_State** state, const char* filepath);
     static int  DoString(lua_State** state, const char* code);    

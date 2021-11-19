@@ -7,6 +7,12 @@ luaErrorCallback luaAPI::onError = nullptr;
 luaWriteLineCallback luaAPI::onWriteLine = nullptr;
 lua_State* luaAPI::L = nullptr;
 
+void luaAPI::Call(lua_State** state, int numArgs, int numReturnValues)
+{
+    lua_call(luaAPI::L, numArgs, numReturnValues);
+    *state = luaAPI::L;
+}
+
 bool luaAPI::CheckArgumentCount(lua_State* state, int numArguments)
 {
     if(lua_gettop(L) != numArguments)

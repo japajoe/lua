@@ -7,6 +7,7 @@ typedef void* lua_State_Ptr;
 
 extern "C"
 {
+    extern void luaAPI_Call(lua_State_Ptr state, int numArgs, int numReturnValues);
     extern bool luaAPI_Dispose(lua_State_Ptr state);    
     extern int  luaAPI_DoFile(lua_State_Ptr state, const char* filepath);
     extern int  luaAPI_DoString(lua_State_Ptr state, const char* code);    
