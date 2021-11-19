@@ -14,7 +14,8 @@ extern "C"
     extern void luaAPI_GetGlobal(lua_State_Ptr state, const char* name);
     extern void luaAPI_GetTable(lua_State_Ptr state, int stackIndex);
     extern int  luaAPI_GetTop(lua_State_Ptr state);
-    extern bool luaAPI_Initialize(lua_State_Ptr state);    
+    extern bool luaAPI_Initialize(lua_State_Ptr state);
+    extern bool luaAPI_IsFunction(lua_State_Ptr state, int stackIndex);
     extern bool luaAPI_IsNumber(lua_State_Ptr state, int stackIndex);
     extern bool luaAPI_IsString(lua_State_Ptr state, int stackIndex);
     extern bool luaAPI_IsTable(lua_State_Ptr state, int stackIndex);   

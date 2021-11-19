@@ -86,6 +86,18 @@ bool luaAPI::Initialize(lua_State** state)
     return true;
 }
 
+bool luaAPI::IsFunction(lua_State** state, int stackIndex)
+{
+    if(lua_isfunction(luaAPI::L, stackIndex))
+    {
+        *state = luaAPI::L;
+        return true;
+    }
+
+    *state = luaAPI::L;
+    return false;
+}
+
 bool luaAPI::IsNumber(lua_State** state, int stackIndex)
 {
     if(lua_isnumber(luaAPI::L, stackIndex))

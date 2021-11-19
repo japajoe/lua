@@ -45,6 +45,12 @@ extern "C" bool luaAPI_Initialize(lua_State_Ptr state)
     return result;
 }
 
+extern "C" bool luaAPI_IsFunction(lua_State_Ptr state, int stackIndex)
+{
+    bool result = luaAPI::IsFunction((lua_State**)state, stackIndex);
+    return result;
+}
+
 extern "C" bool luaAPI_IsNumber(lua_State_Ptr state, int stackIndex)
 {
     bool result = luaAPI::IsNumber((lua_State**)state, stackIndex);

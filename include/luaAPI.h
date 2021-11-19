@@ -27,6 +27,7 @@ public:
     static void GetTable(lua_State** state, int stackIndex);
     static int  GetTop(lua_State** state);
     static bool Initialize(lua_State** state);
+    static bool IsFunction(lua_State** state, int stackIndex);
     static bool IsNumber(lua_State** state, int stackIndex);
     static bool IsString(lua_State** state, int stackIndex);
     static bool IsTable(lua_State** state, int stackIndex);
