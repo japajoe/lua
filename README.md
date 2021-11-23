@@ -1,2 +1,2 @@
 # lua
-Native library for Lua
+Native library for LuaSharp (see https://github.com/japajoe/LuaSharp)
