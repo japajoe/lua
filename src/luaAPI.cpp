@@ -1,222 +1,160 @@
 #include "luaAPI.h"
-#include <iostream>
-#include <cstring>
-#include <cstdint>
 
-luaErrorCallback luaAPI::onError = nullptr;
-luaWriteLineCallback luaAPI::onWriteLine = nullptr;
-lua_State* luaAPI::L = nullptr;
-
-void luaAPI::Call(lua_State** state, int numArgs, int numReturnValues)
+extern "C" void luaAPI_Call(lua_State* state, int numArgs, int numReturnValues)
 {
-    lua_call(luaAPI::L, numArgs, numReturnValues);
-    *state = luaAPI::L;
+    lua_call(state, numArgs, numReturnValues);    
 }
 
-bool luaAPI::CheckArgumentCount(lua_State* state, int numArguments)
+extern "C" bool luaAPI_Close(lua_State* state)
 {
-    if(lua_gettop(L) != numArguments)
-        return false;
-    return true;
-}
-
-bool luaAPI::Dispose(lua_State** state)
-{
-    if(L != nullptr)
+    if(state != nullptr)
     {
-        lua_close(L);
-        L = nullptr;
-        *state = luaAPI::L;
+        lua_close(state);
         return true;
     }
-
-    *state = luaAPI::L;
     return false;
 }
 
-int luaAPI::DoFile(lua_State** state, const char* filepath)
+extern "C" int luaAPI_DoFile(lua_State* state, const char* filepath)
 {
-    int result = luaL_dofile(luaAPI::L, filepath);
-    *state = luaAPI::L;
-    return result;
+    return luaL_dofile(state, filepath);    
 }
 
-int luaAPI::DoString(lua_State** state, const char* code)
+extern "C" int luaAPI_DoString(lua_State* state, const char* code)
 {
-    int result = luaL_dostring(luaAPI::L, code);
-    *state = luaAPI::L;
-    return result;
+    return luaL_dostring(state, code);    
 }
 
-int luaAPI::GetArgumentCount(lua_State** state)
+extern "C" void luaAPI_FreeCharPointer(char* ptr)
 {
-    int result = lua_gettop(L);
-    *state = luaAPI::L;
-    return result;
+    delete[] ptr;
 }
 
-void luaAPI::GetGlobal(lua_State** state, const char* name)
+extern "C" int luaAPI_GetArgumentCount(lua_State* state)
 {
-    lua_getglobal(luaAPI::L, name);
-    *state = luaAPI::L;
+    return lua_gettop(state);    
 }
 
-void luaAPI::GetTable(lua_State** state, int stackIndex)
+extern "C" void luaAPI_GetGlobal(lua_State* state, const char* name)
 {
-    lua_gettable(luaAPI::L, stackIndex);
-    *state = luaAPI::L;
+    lua_getglobal(state, name);    
 }
 
-int luaAPI::GetTop(lua_State** state)
+extern "C" void luaAPI_GetTable(lua_State* state, int stackIndex)
 {
-    int result = lua_gettop(luaAPI::L);
-    *state = luaAPI::L;
-    return result;
+    lua_gettable(state, stackIndex);    
 }
 
-bool luaAPI::Initialize(lua_State** state)
+extern "C" int luaAPI_GetTop(lua_State* state)
 {
-    if(L != nullptr)
-        return false;
-
-    L = luaL_newstate();    
-
-    luaL_openlibs(L);
-
-    lua_register(L, "writeline", lua_WriteLine);
-    luaL_dostring(L, "old_print = print");
-    luaL_dostring(L, "print = writeline");    
-
-    *state = luaAPI::L;       
-
-    return true;
+    return lua_gettop(state);    
 }
 
-bool luaAPI::IsFunction(lua_State** state, int stackIndex)
+extern "C" bool luaAPI_IsFunction(lua_State* state, int stackIndex)
 {
-    if(lua_isfunction(luaAPI::L, stackIndex))
-    {
-        *state = luaAPI::L;
+    if(lua_isfunction(state, stackIndex))
+    {        
         return true;
     }
-
-    *state = luaAPI::L;
+    
     return false;
 }
 
-bool luaAPI::IsNumber(lua_State** state, int stackIndex)
+extern "C" bool luaAPI_IsNumber(lua_State* state, int stackIndex)
 {
-    if(lua_isnumber(luaAPI::L, stackIndex))
-    {
-        *state = luaAPI::L;
+    if(lua_isnumber(state, stackIndex))
+    {        
         return true;
     }
-
-    *state = luaAPI::L;
+    
     return false;
 }
 
-bool luaAPI::IsString(lua_State** state, int stackIndex)
+extern "C" bool luaAPI_IsString(lua_State* state, int stackIndex)
 {
-    if(lua_isstring(luaAPI::L, stackIndex))
-    {
-        *state = luaAPI::L;
+    if(lua_isstring(state, stackIndex))
+    {        
         return true;
     }
-
-    *state = luaAPI::L;
+    
     return false;
 }
 
-bool luaAPI::IsTable(lua_State** state, int stackIndex)
+extern "C" bool luaAPI_IsTable(lua_State* state, int stackIndex)
 {
-    if(lua_istable(luaAPI::L, stackIndex))
-    {
-        *state = luaAPI::L;
+    if(lua_istable(state, stackIndex))
+    {        
         return true;
     }
-
-    *state = luaAPI::L;
+    
     return false;
 }
 
-int luaAPI::PCall(lua_State** state, int numArgs, int numReturnValues, int errorHandlingType)
+extern "C" lua_State* luaAPI_NewState()
 {
-    int result = lua_pcall(luaAPI::L, numArgs, numReturnValues, errorHandlingType);
-    *state = luaAPI::L;
-    return result;
+    return luaL_newstate();
 }
 
-void luaAPI::Pop(lua_State** state, int stackIndex)
+extern "C" void luaAPI_OpenLibs(lua_State* state)
 {
-    lua_pop(luaAPI::L, stackIndex);
-    *state = luaAPI::L;
+    luaL_openlibs(state);
 }
 
-void luaAPI::PushBool(lua_State** state, bool value)
-{
-    lua_pushboolean(luaAPI::L, value);
-    *state = luaAPI::L;
+extern "C" int luaAPI_PCall(lua_State* state, int numArgs, int numReturnValues, int errorHandlingType)
+{    
+    return lua_pcall(state, numArgs, numReturnValues, errorHandlingType);    
 }
 
-void luaAPI::PushFloat(lua_State** state, float value)
+extern "C" void luaAPI_Pop(lua_State* state, int stackIndex)
 {
-    lua_pushnumber(luaAPI::L, value);
-    *state = luaAPI::L;
+    lua_pop(state, stackIndex);    
 }
 
-void luaAPI::PushInt(lua_State** state, int value)
+extern "C" void luaAPI_PushBool(lua_State* state, bool value)
 {
-    lua_pushnumber(luaAPI::L, value);
-    *state = luaAPI::L;
+    lua_pushboolean(state, value);    
 }
 
-void luaAPI::PushString(lua_State** state, const char* value)
+extern "C" void luaAPI_PushFloat(lua_State* state, float value)
 {
-    lua_pushstring(luaAPI::L, value);
-    *state = luaAPI::L;
+    lua_pushnumber(state, value);    
 }
 
-void luaAPI::RegisterFunction(lua_State** state, luaFunction fn_ptr, const char* name)
+extern "C" void luaAPI_PushInt(lua_State* state, int value)
 {
-    lua_register(luaAPI::L, name, fn_ptr);
-    *state = luaAPI::L;
+    lua_pushnumber(state, value);    
 }
 
-void luaAPI::SetTop(lua_State** state, int stackIndex)
+extern "C" void luaAPI_PushString(lua_State* state, const char* value)
 {
-    lua_settop(luaAPI::L, stackIndex);
-    *state = luaAPI::L;
+    lua_pushstring(state, value);    
 }
 
-void luaAPI::ToFloat(lua_State** state, int stackIndex, float* number)
+extern "C" void luaAPI_Register_Function(lua_State* state, luaFunction fn_ptr, const char* name)
 {
-    *number = (float)lua_tointeger(luaAPI::L, stackIndex);
-    *state = luaAPI::L;
+    lua_register(state, name, fn_ptr);    
 }
 
-void luaAPI::ToInt(lua_State** state, int stackIndex, int* number)
+extern "C" void luaAPI_SetTop(lua_State* state, int stackIndex)
 {
-    *number = (int)lua_tointeger(luaAPI::L, stackIndex);
-    *state = luaAPI::L;
+    lua_settop(state, stackIndex);    
 }
 
-void luaAPI::ToString(lua_State** state, int stackIndex, char* str)
+extern "C" void luaAPI_ToFloat(lua_State* state, int stackIndex, float* number)
 {
-    std::string message = lua_tostring(luaAPI::L, stackIndex);
-    memcpy(str, &message[0], message.length());
-    *state = luaAPI::L;
+    *number = (float)lua_tointeger(state, stackIndex);    
 }
 
-int luaAPI::lua_WriteLine(lua_State* state)
+extern "C" void luaAPI_ToInt(lua_State* state, int stackIndex, int* number)
 {
-    if(!CheckArgumentCount(luaAPI::L, 1))
-        return -1;
+    *number = (int)lua_tointeger(state, stackIndex);    
+}
 
-    std::string message = lua_tostring(L, 1);
-
-    if(luaAPI::onWriteLine != nullptr)
-        luaAPI::onWriteLine(message.c_str());
-
-    return 0;
+extern "C" char* luaAPI_ToString(lua_State* state, int stackIndex)
+{
+    std::string message = lua_tostring(state, stackIndex);
+    char* str = new char[message.size()+1];
+    memcpy(str, &message[0], message.size());
+    str[message.size()] = '\0';
+    return str;
 }
