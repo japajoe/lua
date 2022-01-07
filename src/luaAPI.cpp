@@ -90,6 +90,11 @@ extern "C" bool luaAPI_IsTable(lua_State* state, int stackIndex)
     return false;
 }
 
+extern "C" bool luaAPI_IsUserData(lua_State* state, int stackIndex)
+{
+    return lua_isuserdata(state, stackIndex);
+}
+
 extern "C" lua_State* luaAPI_NewState()
 {
     return luaL_newstate();
@@ -130,6 +135,11 @@ extern "C" void luaAPI_PushString(lua_State* state, const char* value)
     lua_pushstring(state, value);    
 }
 
+extern "C" void luaAPI_PushLightUserData(lua_State* state, void* userData)
+{
+    lua_pushlightuserdata(state, userData);    
+}
+
 extern "C" void luaAPI_Register_Function(lua_State* state, luaFunction fn_ptr, const char* name)
 {
     lua_register(state, name, fn_ptr);    
@@ -157,4 +167,9 @@ extern "C" char* luaAPI_ToString(lua_State* state, int stackIndex)
     memcpy(str, &message[0], message.size());
     str[message.size()] = '\0';
     return str;
+}
+
+extern "C" void* luaAPI_ToUserData(lua_State* state, int stackIndex)
+{
+    return lua_touserdata(state, stackIndex);
 }

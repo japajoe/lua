@@ -27,6 +27,7 @@ extern "C"
     extern bool luaAPI_IsNumber(lua_State* state, int stackIndex);
     extern bool luaAPI_IsString(lua_State* state, int stackIndex);
     extern bool luaAPI_IsTable(lua_State* state, int stackIndex);
+    extern bool luaAPI_IsUserData(lua_State* state, int stackIndex);
     extern lua_State* luaAPI_NewState();
     extern void luaAPI_OpenLibs(lua_State* state);
     extern int  luaAPI_PCall(lua_State* state, int numArgs, int numReturnValues, int errorHandlingType);
@@ -34,12 +35,14 @@ extern "C"
     extern void luaAPI_PushBool(lua_State* state, bool value);
     extern void luaAPI_PushFloat(lua_State* state, float value);
     extern void luaAPI_PushInt(lua_State* state, int value);
+    extern void luaAPI_PushLightUserData(lua_State* state, void* userData);
     extern void luaAPI_PushString(lua_State* state, const char* value);
     extern void luaAPI_Register_Function(lua_State* state, luaFunction fn_ptr, const char* name);
     extern void luaAPI_SetTop(lua_State* state, int stackIndex);
     extern void luaAPI_ToFloat(lua_State* state, int stackIndex, float* number);
     extern void luaAPI_ToInt(lua_State* state, int stackIndex, int* number);
     extern char* luaAPI_ToString(lua_State* state, int stackIndex);
+    extern void* luaAPI_ToUserData(lua_State* state, int stackIndex);
 }
 
 #endif
